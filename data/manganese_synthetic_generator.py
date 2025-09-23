@@ -23,7 +23,7 @@ class ManganeseDataGenerator:
 
         # Ore characteristics ranges (based on typical manganese ores
         self.ore_params = {
-            'mn_grade_mean': 40.0,  # Avg manganese grade
+            'mn_grade_mean': 62.0,  # Avg manganese grade
             'mn_grade_std':8.0, # Standard Deviation
             'fe_content_range':(16,22),  # Fe content %
             'siO2_range': (2,8), # Silica content %
@@ -49,7 +49,7 @@ class ManganeseDataGenerator:
             sigma=0.3,
             size=n_samples
         )
-        mn_grades = np.clip(mn_grades, 15, 52)
+        mn_grades = np.clip(mn_grades, 44.13, 77.71)
 
         # Generate correlated elements (inverse correlation with Mn)
         fe_content = np.random.uniform(*self.ore_params['fe_content_range'], n_samples)
@@ -94,6 +94,22 @@ class ManganeseDataGenerator:
 
         print(f"Generated {len(ore_data)} ore feed records")
         return ore_data
+
+    def blend_ores(self, ore_data, high_grade_cutoff=60, blend_ratio=0.3):
+        """
+        Simulate blending high-grade and low-grade ore.
+        """
+        high_grade = ore_data[ore_data['mn_grade_pct'] >= high_grade_cutoff]
+        low_grade = ore_data[ore_data['mn_grade_pct'] < high_grade_cutoff]
+
+        n_low = len(low_grade)
+        n_high = int(n_low * blend_ratio / (1 - blend_ratio))
+        high_sample = high_grade.sample(n=min(n_high, len(high_grade)), replace=True)
+
+        blended_feed = pd.concat([low_grade, high_sample]).sample(frac=1).reset_index(drop=True)
+        print(f"Blended {len(blended_feed)} ore feed records")
+        return blended_feed
+
 
     def generate_crushing_data(self, ore_data, n_samples=15000):
         """Generate crushing circuit performance data"""
@@ -362,8 +378,9 @@ class ManganeseDataGenerator:
 
         # Generate individual datasets
         ore_data = self.generate_ore_feed_data(10000)
-        crushing_data = self.generate_crushing_data(ore_data, 15000)
-        separation_data = self.generate_separation_data(ore_data, 12000)
+        blended_ore = self.blend_ores(ore_data, high_grade_cutoff=60, blend_ratio=0.3)
+        crushing_data = self.generate_crushing_data(blended_ore, 15000)
+        separation_data = self.generate_separation_data(blended_ore, 12000)
         equipment_health = self.generate_equipment_health_data(8000)
         energy_data = self.generate_energy_data(crushing_data, separation_data, 10000)
 
@@ -380,6 +397,7 @@ class ManganeseDataGenerator:
 
         return {
             'ore_feed': ore_data,
+            'blended_ore_feed': blended_ore,
             'crushing_circuit': crushing_data,
             'separation_circuit': separation_data,
             'equipment_health': equipment_health,
