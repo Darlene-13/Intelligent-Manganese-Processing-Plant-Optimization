@@ -264,8 +264,8 @@ After 1 week of development:
 ## 📞 Support
 
 - **Technical Issues**: Create GitHub issue
-- **Questions**: Email support@yourcompany.com
-- **Documentation**: Check `docs/` folder
+- **Questions**: Email darlenewendie@gmail.com
+- **Documentation**: Check `docs/` and `reports/` folder
 
 ## 📄 License
 
