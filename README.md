@@ -71,13 +71,13 @@ manganese-ml-optimization/
 │   ├── data_config.yaml
 │   └── processing_parameters.yaml
 ├── data/
-│   ├── raw/
-│   │   ├── process_data/
-│   │   ├── equipment_data/
-│   │   ├── lab_results/
-│   │   └── synthetic/
-│   ├── processed/
-│   └── external/
+│   ├── synthetic/
+│   │   ├── manganese_crushing_circuit.csv/
+│   │   ├── manganese_energy_consumption.csv/
+│   │   ├── manganese_equipment_health.csv/
+│   │   └── manganese_ore_feed.csv/
+│   │   ├── manganese_separation_circuit.csv
+│   ├── manganese_synthetic_generator.py
 ├── src/
 │   ├── data_preprocessing.py
 │   ├── exploratory_analysis.py
