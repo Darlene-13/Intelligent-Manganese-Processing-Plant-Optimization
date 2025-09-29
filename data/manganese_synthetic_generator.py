@@ -238,54 +238,150 @@ class ManganeseDataGenerator:
         return separation_data
 
     def generate_equipment_health_data(self, n_samples=8000):
-        """Generate equipment health monitoring data"""
-        print(" Generating Equipment Health Dataset...")
+        """Generate comprehensive equipment health monitoring data for complete manganese processing plant"""
+        print("Generating Equipment Health Dataset...")
 
-        # Equipment types
-        equipment_types = ['crusher', 'pump', 'spiral', 'magnetic_sep', 'conveyor']
-        equipment_ids = [f"{eq_type}_{i:02d}" for eq_type in equipment_types for i in range(1, 6)]
+        # Complete equipment types for manganese processing plant
+        equipment_types = [
+            'primary_crusher', 'secondary_crusher', 'tertiary_crusher',
+            'vibrating_screen', 'trommel_screen', 'dewatering_screen',
+            'spiral_concentrator', 'jig', 'shaking_table',
+            'magnetic_separator_lims', 'magnetic_separator_hims',
+            'flotation_cell_rougher', 'flotation_cell_cleaner', 'flotation_cell_scavenger',
+            'dms_cyclone', 'hydrocyclone',
+            'thickener', 'vacuum_filter', 'filter_press',
+            'slurry_pump', 'sump_pump', 'transfer_pump',
+            'conveyor_belt', 'apron_feeder', 'vibrating_feeder',
+            'agitator', 'air_blower', 'reagent_dosing_pump'
+        ]
+
+        # Generate equipment IDs (2-5 units per equipment type depending on criticality)
+        equipment_ids = []
+        equipment_counts = {
+            'primary_crusher': 2, 'secondary_crusher': 3, 'tertiary_crusher': 2,
+            'vibrating_screen': 5, 'trommel_screen': 2, 'dewatering_screen': 3,
+            'spiral_concentrator': 8, 'jig': 4, 'shaking_table': 3,
+            'magnetic_separator_lims': 4, 'magnetic_separator_hims': 3,
+            'flotation_cell_rougher': 6, 'flotation_cell_cleaner': 4, 'flotation_cell_scavenger': 3,
+            'dms_cyclone': 3, 'hydrocyclone': 5,
+            'thickener': 2, 'vacuum_filter': 3, 'filter_press': 2,
+            'slurry_pump': 12, 'sump_pump': 6, 'transfer_pump': 8,
+            'conveyor_belt': 15, 'apron_feeder': 4, 'vibrating_feeder': 3,
+            'agitator': 5, 'air_blower': 4, 'reagent_dosing_pump': 6
+        }
+
+        for eq_type, count in equipment_counts.items():
+            equipment_ids.extend([f"{eq_type}_{i:02d}" for i in range(1, count + 1)])
 
         health_data = []
 
         for i in range(n_samples):
             equipment_id = np.random.choice(equipment_ids)
-            equipment_type = equipment_id.split('_')[0]
+            equipment_type = '_'.join(equipment_id.split('_')[:-1])  # Handle multi-word equipment types
 
-            # Operating hours (affects health)
-            operating_hours = np.random.uniform(0, 8760 * 5, 1)[0]  # Up to 5 years
+            # Operating hours (affects health) - varies by equipment type
+            if 'crusher' in equipment_type or 'pump' in equipment_type:
+                max_hours = 8760 * 5  # 5 years for high-wear equipment
+            elif 'conveyor' in equipment_type or 'screen' in equipment_type:
+                max_hours = 8760 * 7  # 7 years
+            else:
+                max_hours = 8760 * 8  # 8 years for other equipment
+
+            operating_hours = np.random.uniform(0, max_hours, 1)[0]
 
             # Base health score (decreases with age)
-            base_health = 100 * (1 - operating_hours / (8760 * 10))  # 10-year life
+            expected_life = max_hours * 2  # Total design life
+            base_health = 100 * (1 - operating_hours / expected_life)
             base_health += np.random.normal(0, 10)
             base_health = np.clip(base_health, 20, 100)
 
-            # Equipment-specific parameters
-            if equipment_type == 'crusher':
-                vibration = 2 + (100 - base_health) * 0.1 + np.random.normal(0, 0.5)
-                temperature = 60 + (100 - base_health) * 0.3 + np.random.normal(0, 5)
+            # Equipment-specific parameters based on equipment type
+            if 'crusher' in equipment_type:
+                vibration = 2.5 + (100 - base_health) * 0.12 + np.random.normal(0, 0.6)
+                temperature = 65 + (100 - base_health) * 0.35 + np.random.normal(0, 6)
                 power_factor = 0.85 - (100 - base_health) * 0.002
+                wear_rate = (100 - base_health) * 0.8  # Liner wear
 
-            elif equipment_type == 'pump':
-                vibration = 1.5 + (100 - base_health) * 0.08 + np.random.normal(0, 0.3)
-                temperature = 70 + (100 - base_health) * 0.4 + np.random.normal(0, 8)
+            elif 'pump' in equipment_type:
+                vibration = 1.8 + (100 - base_health) * 0.09 + np.random.normal(0, 0.4)
+                temperature = 75 + (100 - base_health) * 0.45 + np.random.normal(0, 9)
                 power_factor = 0.90 - (100 - base_health) * 0.0015
+                wear_rate = (100 - base_health) * 0.6  # Impeller wear
 
-            else:  # Other equipment
+            elif 'screen' in equipment_type:
+                vibration = 3.5 + (100 - base_health) * 0.15 + np.random.normal(0, 0.7)
+                temperature = 50 + (100 - base_health) * 0.25 + np.random.normal(0, 4)
+                power_factor = 0.87 - (100 - base_health) * 0.0018
+                wear_rate = (100 - base_health) * 0.9  # Screen deck wear
+
+            elif 'flotation' in equipment_type:
+                vibration = 1.2 + (100 - base_health) * 0.06 + np.random.normal(0, 0.25)
+                temperature = 40 + (100 - base_health) * 0.15 + np.random.normal(0, 3)
+                power_factor = 0.89 - (100 - base_health) * 0.001
+                wear_rate = (100 - base_health) * 0.4  # Impeller/stator wear
+
+            elif 'magnetic' in equipment_type:
+                vibration = 1.5 + (100 - base_health) * 0.07 + np.random.normal(0, 0.3)
+                temperature = 55 + (100 - base_health) * 0.28 + np.random.normal(0, 5)
+                power_factor = 0.88 - (100 - base_health) * 0.0012
+                wear_rate = (100 - base_health) * 0.5  # Belt/drum wear
+
+            elif 'spiral' in equipment_type or 'jig' in equipment_type:
                 vibration = 1.0 + (100 - base_health) * 0.05 + np.random.normal(0, 0.2)
-                temperature = 45 + (100 - base_health) * 0.2 + np.random.normal(0, 3)
-                power_factor = 0.88 - (100 - base_health) * 0.001
+                temperature = 35 + (100 - base_health) * 0.12 + np.random.normal(0, 2)
+                power_factor = 0.86 - (100 - base_health) * 0.0008
+                wear_rate = (100 - base_health) * 0.7  # Surface wear
 
-            vibration = np.clip(vibration, 0.5, 15)
-            temperature = np.clip(temperature, 25, 120)
-            power_factor = np.clip(power_factor, 0.6, 0.95)
+            elif 'conveyor' in equipment_type:
+                vibration = 2.0 + (100 - base_health) * 0.10 + np.random.normal(0, 0.45)
+                temperature = 48 + (100 - base_health) * 0.22 + np.random.normal(0, 4)
+                power_factor = 0.84 - (100 - base_health) * 0.0016
+                wear_rate = (100 - base_health) * 0.85  # Belt wear
 
-            # Failure probability (increases with poor health)
-            failure_prob = 1 - (base_health / 100) ** 2
-            failure_prob = np.clip(failure_prob, 0, 0.8)
+            elif 'thickener' in equipment_type or 'filter' in equipment_type:
+                vibration = 0.8 + (100 - base_health) * 0.04 + np.random.normal(0, 0.15)
+                temperature = 38 + (100 - base_health) * 0.10 + np.random.normal(0, 2)
+                power_factor = 0.91 - (100 - base_health) * 0.0009
+                wear_rate = (100 - base_health) * 0.3  # Media/cloth wear
+
+            elif 'cyclone' in equipment_type:
+                vibration = 1.3 + (100 - base_health) * 0.06 + np.random.normal(0, 0.25)
+                temperature = 42 + (100 - base_health) * 0.18 + np.random.normal(0, 3)
+                power_factor = 0.87 - (100 - base_health) * 0.0010
+                wear_rate = (100 - base_health) * 0.65  # Liner wear
+
+            else:  # Feeders, agitators, blowers, etc.
+                vibration = 1.4 + (100 - base_health) * 0.07 + np.random.normal(0, 0.3)
+                temperature = 52 + (100 - base_health) * 0.24 + np.random.normal(0, 4)
+                power_factor = 0.88 - (100 - base_health) * 0.0011
+                wear_rate = (100 - base_health) * 0.55
+
+            # Clip values to realistic ranges
+            vibration = np.clip(vibration, 0.3, 20)
+            temperature = np.clip(temperature, 25, 135)
+            power_factor = np.clip(power_factor, 0.55, 0.98)
+            wear_rate = np.clip(wear_rate, 0, 100)
+
+            # Failure probability (increases with poor health and wear)
+            failure_prob = (1 - (base_health / 100) ** 2) * (1 + wear_rate / 200)
+            failure_prob = np.clip(failure_prob, 0, 0.85)
 
             # Remaining useful life (days)
-            rul_days = (base_health / 100) * 1825 + np.random.normal(0, 100)  # Up to 5 years
-            rul_days = np.clip(rul_days, 1, 1825)
+            rul_days = (base_health / 100) * 1825 * (1 - wear_rate / 200)
+            rul_days += np.random.normal(0, 100)
+            rul_days = np.clip(rul_days, 1, 2500)
+
+            # Maintenance priority (1=critical, 5=low)
+            if failure_prob > 0.5:
+                maintenance_priority = 1
+            elif failure_prob > 0.3:
+                maintenance_priority = 2
+            elif failure_prob > 0.15:
+                maintenance_priority = 3
+            elif failure_prob > 0.05:
+                maintenance_priority = 4
+            else:
+                maintenance_priority = 5
 
             timestamp = (datetime.datetime(2020, 1, 1) +
                          datetime.timedelta(hours=np.random.randint(0, n_samples * 2)))
@@ -299,12 +395,22 @@ class ManganeseDataGenerator:
                 'vibration_rms': np.round(vibration, 2),
                 'temperature_c': np.round(temperature, 1),
                 'power_factor': np.round(power_factor, 3),
+                'wear_rate_pct': np.round(wear_rate, 1),
                 'failure_probability': np.round(failure_prob, 4),
-                'rul_days': np.round(rul_days, 0)
+                'rul_days': np.round(rul_days, 0),
+                'maintenance_priority': maintenance_priority
             })
 
         equipment_health = pd.DataFrame(health_data)
-        print(f" Generated {len(equipment_health)} equipment health records")
+
+        # Summary statistics
+        unique_equipment = equipment_health['equipment_type'].nunique()
+        total_units = equipment_health['equipment_id'].nunique()
+
+        print(f"Generated {len(equipment_health)} equipment health records")
+        print(f"Equipment types: {unique_equipment}")
+        print(f"Total equipment units: {total_units}")
+
         return equipment_health
 
     def generate_energy_data(self, crushing_data, separation_data, n_samples=10000):
