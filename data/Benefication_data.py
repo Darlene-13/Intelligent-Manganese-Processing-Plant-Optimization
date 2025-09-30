@@ -14,6 +14,26 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+"""
+The data generation pipeline begins with the ore dataset, which simulates raw manganese ore feed properties such as
+particle size distribution, moisture, density, and manganese grade, forming the foundation for all downstream processes. 
+This ore is then processed through multiple beneficiation circuits that reflect real-world mineral processing operations.
+In the Dense Media Separation (DMS) stage, feed characteristics (density, size, Mn grade) are combined with cyclone parameters
+(media density, pressure) and equipment health to generate outputs like sink and float grades, yield, recovery, and media recovery. 
+The jigging circuit models gravity separation by incorporating jig stroke length, frequency, water flow, and bed conditions,
+ with outputs including concentrate grade, tailings grade, recovery, and separation efficiency — all of which are influenced 
+by ore properties and jig health. The flotation circuit focuses on reagent chemistry and hydrodynamics, generating data on recovery, 
+concentrate/tailings grade, froth stability, and reagent consumption, based on inputs like collector/frother dosage, pH, air flow, 
+residence time, and flotation cell health. These upgraded products (from DMS, jigging, and flotation) converge into the 
+dewatering stage, where thickeners and filters reduce moisture and recover water. Here, parameters like solids 
+concentration, flocculant dosage, pressure, and equipment health shape outputs such as underflow solids %, overflow 
+clarity, thickening efficiency, cake moisture, and water recovery. Across all circuits, equipment health metrics 
+(e.g., cyclone wear, pump vibration, cell efficiency, filter condition) directly influence process performance, simulating 
+how aging or failing machines degrade recovery, grade, and efficiency. Finally, all datasets are saved (flotation, DMS, 
+jigging, dewatering), collectively creating a digital twin of the beneficiation plant where ore characteristics, operational 
+parameters, and equipment condition interact to determine overall plant efficiency, product quality, and sustainability.
+"""
+
 class EnhancedManganeseModules:
     """Additional beneficiation modules with equipment health correlation"""
 
