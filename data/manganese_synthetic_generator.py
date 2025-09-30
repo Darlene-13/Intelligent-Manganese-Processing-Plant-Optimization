@@ -29,6 +29,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import warnings
+from Benefication_data import EnhancedManganeseModules
+
 warnings.filterwarnings('ignore')
 
 class ManganeseDataGenerator:
@@ -449,10 +451,11 @@ class ManganeseDataGenerator:
     capture gradual degradation over time.
     """
 
-
-    def generate_energy_data(self, crushing_data, separation_data, n_samples=10000):
-        """Generate energy consumption dataset"""
-        print("Generating Energy Consumption Dataset...")
+    def generate_energy_data(self, crushing_data, separation_data, flotation_data=None,
+                             dms_data=None, jigging_data=None, dewatering_data=None,
+                             n_samples=10000):
+        """Generate comprehensive energy consumption dataset with all circuits"""
+        print("Generating Comprehensive Energy Consumption Dataset...")
 
         # Base energy consumption patterns
         timestamps = pd.date_range('2020-01-01', periods=n_samples, freq='H')
@@ -460,58 +463,216 @@ class ManganeseDataGenerator:
         # Daily and seasonal patterns
         hour_of_day = timestamps.hour
         day_of_year = timestamps.dayofyear
+        day_of_week = timestamps.dayofweek
 
-        # Base load (always present)
+        # Base load (always present) - lighting, HVAC, control systems
         base_load = 200 + 50 * np.sin(2 * np.pi * day_of_year / 365)  # Seasonal variation
 
-        # Crushing energy (sample from crushing data)
+        # === PRIMARY CRUSHING CIRCUIT ===
         crushing_sample_idx = np.random.choice(len(crushing_data), n_samples, replace=True)
         crushing_power = crushing_data.iloc[crushing_sample_idx]['power_draw_kw'].values
 
-        # Processing energy (from separation circuits)
+        # Screening power (vibrating screens consume 15-25 kW each, assume 5 screens)
+        screening_power = np.random.uniform(75, 125, n_samples)
+
+        # === GRAVITY SEPARATION CIRCUIT ===
         sep_sample_idx = np.random.choice(len(separation_data), n_samples, replace=True)
 
-        # Spiral energy (proportional to speed and throughput)
+        # Spiral concentrators (low power - gravity driven with feed pumps)
         spiral_power = 15 * separation_data.iloc[sep_sample_idx]['spiral_speed_rpm'].values / 200
 
-        # Magnetic separator energy
+        # Magnetic separators
         mag_power = 25 * separation_data.iloc[sep_sample_idx]['magnetic_intensity_t'].values
 
-        # Pumping energy (varies with throughput)
-        pump_power = np.random.uniform(80, 150, n_samples)
+        # Jigging circuit power (if available)
+        if jigging_data is not None and len(jigging_data) > 0:
+            jig_sample_idx = np.random.choice(len(jigging_data), n_samples, replace=True)
+            # Jigs: 20-40 kW per unit, assume 4 jigs
+            jig_power = np.random.uniform(80, 160, n_samples)
+        else:
+            jig_power = np.zeros(n_samples)
 
-        # Conveyor energy
-        conveyor_power = np.random.uniform(25, 45, n_samples)
+        # Total gravity separation
+        gravity_separation_power = spiral_power + jig_power
 
-        # Total plant power
-        total_power = (base_load + crushing_power + spiral_power +
-                       mag_power + pump_power + conveyor_power)
+        # === FLOTATION CIRCUIT ===
+        if flotation_data is not None and len(flotation_data) > 0:
+            flot_sample_idx = np.random.choice(len(flotation_data), n_samples, replace=True)
 
-        # Add operational variations (night shifts, maintenance)
-        operational_factor = np.where((hour_of_day >= 6) & (hour_of_day <= 18),
-                                      1.0, 0.7)  # Reduced night operation
-        total_power *= operational_factor
+            # Flotation cells (agitators: 30-75 kW each)
+            # Rougher: 6 cells, Cleaner: 4 cells, Scavenger: 3 cells = 13 cells
+            flotation_cells_power = np.random.uniform(390, 975, n_samples)  # 13 cells * 30-75kW
 
-        # Add random maintenance shutdowns (5% probability)
+            # Air blowers for flotation (4 blowers at 45-65 kW each)
+            compressed_air_power = np.random.uniform(180, 260, n_samples)
+
+            # Conditioning tanks agitators
+            conditioning_power = np.random.uniform(40, 80, n_samples)
+
+            flotation_total_power = flotation_cells_power + compressed_air_power + conditioning_power
+        else:
+            flotation_total_power = np.zeros(n_samples)
+            compressed_air_power = np.zeros(n_samples)
+
+        # === DMS CIRCUIT ===
+        if dms_data is not None and len(dms_data) > 0:
+            dms_sample_idx = np.random.choice(len(dms_data), n_samples, replace=True)
+
+            # DMS cyclones (feed pumps: 75-150 kW, 3 cyclones)
+            dms_cyclone_power = np.random.uniform(225, 450, n_samples)
+
+            # Media recovery circuit (pumps, magnetic separators)
+            media_recovery_power = np.random.uniform(50, 100, n_samples)
+
+            dms_total_power = dms_cyclone_power + media_recovery_power
+        else:
+            dms_total_power = np.zeros(n_samples)
+
+        # === DEWATERING CIRCUIT ===
+        if dewatering_data is not None and len(dewatering_data) > 0:
+            dew_sample_idx = np.random.choice(len(dewatering_data), n_samples, replace=True)
+
+            # Thickeners (rake drives: 15-30 kW each, 2 thickeners)
+            thickener_power = np.random.uniform(30, 60, n_samples)
+
+            # Filters (vacuum pumps/pressure systems: 50-120 kW per filter, 5 filters)
+            filtration_power = np.random.uniform(250, 600, n_samples)
+
+            # Flocculant preparation
+            flocculant_system_power = np.random.uniform(10, 25, n_samples)
+
+            dewatering_total_power = thickener_power + filtration_power + flocculant_system_power
+        else:
+            thickener_power = np.random.uniform(30, 60, n_samples)
+            filtration_power = np.random.uniform(250, 600, n_samples)
+            dewatering_total_power = thickener_power + filtration_power
+
+        # === AUXILIARY SYSTEMS ===
+
+        # Pumping systems (slurry, sump, transfer pumps - 12 pumps at 15-35 kW)
+        pumping_power = np.random.uniform(180, 420, n_samples)
+
+        # Conveyor systems (15 conveyors at 7-15 kW each)
+        conveying_power = np.random.uniform(105, 225, n_samples)
+
+        # Water treatment and recycling
+        water_treatment_power = np.random.uniform(50, 100, n_samples)
+
+        # === TOTAL PLANT POWER ===
+        total_power = (
+                base_load +
+                crushing_power +
+                screening_power +
+                gravity_separation_power +
+                mag_power +
+                flotation_total_power +
+                dms_total_power +
+                dewatering_total_power +
+                pumping_power +
+                conveying_power +
+                water_treatment_power
+        )
+
+        # === OPERATIONAL VARIATIONS ===
+
+        # Day/night operation (reduced efficiency at night)
+        operational_factor = np.where((hour_of_day >= 6) & (hour_of_day <= 18), 1.0, 0.75)
+
+        # Weekend operation (reduced or maintenance)
+        weekend_factor = np.where(day_of_week < 5, 1.0, 0.6)
+
+        # Combined operational factor
+        combined_factor = operational_factor * weekend_factor
+        total_power *= combined_factor
+
+        # Maintenance shutdowns (5% probability, 10% power for essential systems only)
         maintenance_mask = np.random.random(n_samples) < 0.05
         total_power = np.where(maintenance_mask, total_power * 0.1, total_power)
 
-        # Energy costs (varies by time of day)
-        energy_cost_per_kwh = 0.08 + 0.02 * np.sin(2 * np.pi * hour_of_day / 24)
+        # === ENERGY COSTS ===
+
+        # Time-of-use pricing (peak hours more expensive)
+        base_energy_cost = 0.08
+
+        # Peak hours (7-11 AM, 5-9 PM) - higher rates
+        peak_hours = ((hour_of_day >= 7) & (hour_of_day <= 11)) | ((hour_of_day >= 17) & (hour_of_day <= 21))
+        energy_cost_per_kwh = np.where(peak_hours, base_energy_cost * 1.5, base_energy_cost)
+
+        # Off-peak discount (11 PM - 5 AM)
+        off_peak = (hour_of_day >= 23) | (hour_of_day <= 5)
+        energy_cost_per_kwh = np.where(off_peak, base_energy_cost * 0.7, energy_cost_per_kwh)
+
+        # Seasonal variation (summer cooling loads)
+        seasonal_factor = 1 + 0.15 * np.sin(2 * np.pi * day_of_year / 365)
+        energy_cost_per_kwh *= seasonal_factor
+
+        # === POWER QUALITY METRICS ===
+
+        # Plant power factor (affected by motor loads)
+        base_power_factor = 0.87
+        power_factor_variation = np.random.normal(0, 0.03, n_samples)
+        plant_power_factor = np.clip(base_power_factor + power_factor_variation, 0.75, 0.95)
+
+        # Reactive power
+        apparent_power = total_power / plant_power_factor
+        reactive_power = np.sqrt(apparent_power ** 2 - total_power ** 2)
+
+        # Demand charges (based on peak 15-min demand)
+        demand_charge_rate = 15  # $/kW per month
+
+        # === CREATE COMPREHENSIVE DATASET ===
 
         energy_data = pd.DataFrame({
             'timestamp': timestamps,
+
+            # Total Power
             'total_power_kw': np.round(total_power, 0),
+            'apparent_power_kva': np.round(apparent_power, 0),
+            'reactive_power_kvar': np.round(reactive_power, 0),
+            'plant_power_factor': np.round(plant_power_factor, 3),
+
+            # Circuit Breakdown
             'crushing_power_kw': np.round(crushing_power, 0),
-            'separation_power_kw': np.round(spiral_power + mag_power, 0),
-            'auxiliary_power_kw': np.round(pump_power + conveyor_power, 0),
+            'screening_power_kw': np.round(screening_power, 0),
+            'gravity_separation_power_kw': np.round(gravity_separation_power, 0),
+            'magnetic_separation_power_kw': np.round(mag_power, 0),
+            'flotation_power_kw': np.round(flotation_total_power, 0),
+            'dms_power_kw': np.round(dms_total_power, 0),
+            'thickening_power_kw': np.round(thickener_power, 0),
+            'filtration_power_kw': np.round(filtration_power, 0),
+
+            # Auxiliary Systems
+            'pumping_power_kw': np.round(pumping_power, 0),
+            'conveying_power_kw': np.round(conveying_power, 0),
+            'compressed_air_power_kw': np.round(compressed_air_power, 0),
+            'water_treatment_power_kw': np.round(water_treatment_power, 0),
             'base_load_kw': np.round(base_load, 0),
+
+            # Operational Context
+            'operational_factor': np.round(combined_factor, 2),
+            'is_peak_hours': peak_hours,
+            'is_off_peak': off_peak,
+            'maintenance_mode': maintenance_mask,
+            'shift': np.where(hour_of_day < 8, 3, np.where(hour_of_day < 16, 1, 2)),
+
+            # Cost Metrics
             'energy_cost_kwh': np.round(energy_cost_per_kwh, 4),
-            'operational_factor': np.round(operational_factor, 2),
-            'maintenance_mode': maintenance_mask
+            'hourly_energy_cost': np.round(total_power * energy_cost_per_kwh, 2),
+            'demand_charge_exposure': np.round(total_power * demand_charge_rate / 720, 2),  # Monthly charge
+
+            # Time Features
+            'hour_of_day': hour_of_day,
+            'day_of_week': day_of_week,
+            'month': timestamps.month,
+            'is_weekend': day_of_week >= 5
         })
 
-        print(f"Generated {len(energy_data)} energy consumption records")
+        print(f"Generated {len(energy_data)} comprehensive energy records")
+        print(f"  Primary Circuits: Crushing, Screening")
+        print(f"  Beneficiation: Gravity, Magnetic, Flotation, DMS")
+        print(f"  Dewatering: Thickening, Filtration")
+        print(f"  Auxiliary: Pumping, Conveying, Air, Water Treatment")
+
         return energy_data
 
     def generate_complete_dataset(self):
@@ -524,8 +685,25 @@ class ManganeseDataGenerator:
         blended_ore = self.blend_ores(ore_data, high_grade_cutoff=60, blend_ratio=0.3)
         crushing_data = self.generate_crushing_data(blended_ore, 15000)
         separation_data = self.generate_separation_data(blended_ore, 12000)
+
+        enhanced_generator = EnhancedManganeseModules(random_state=42)
+
+        flotation_data = enhanced_generator.generate_flotation_data(separation_data, 12000)
+        dms_data = enhanced_generator.generate_dms_data(ore_data, 8000)
+        jigging_data = enhanced_generator.generate_jigging_data(ore_data, 10000)
+        dewatering_data = enhanced_generator.generate_dewatering_data(flotation_data, dms_data, 8000)
+
+        energy_data = self.generate_energy_data(
+            crushing_data=crushing_data,
+            separation_data=separation_data,
+            flotation_data=flotation_data,
+            dms_data=dms_data,
+            jigging_data=jigging_data,
+            dewatering_data=dewatering_data,
+            n_samples=10000
+        )
+
         equipment_health = self.generate_equipment_health_data(8000)
-        energy_data = self.generate_energy_data(crushing_data, separation_data, 10000)
 
         # Create summary statistics
         print("\n DATASET SUMMARY")
