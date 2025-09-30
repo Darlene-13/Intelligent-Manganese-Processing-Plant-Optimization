@@ -7,6 +7,24 @@ Purpose: Create comprehensive datasets for manganese processing plant optimizati
 
 """
 
+
+"""
+The simulation begins with the ore dataset, which establishes the foundation by characterizing manganese
+feed in terms of grade percentage, size distribution, hardness, and ore type (oxide or carbonate), 
+providing the variability that drives downstream performance.
+This ore data is then used to generate the crushing dataset, where equipment throughput, product size,
+and power draw are modeled as functions of ore hardness and crusher type, incorporating wear, operational efficiency,
+ and energy demand. Building on this, the separation dataset reflects gravity (spiral concentrators) and magnetic 
+ separation stages, where parameters such as spiral speed, wash water, feed density, and magnetic field intensity are 
+ used to predict concentrate grade, tailings quality, and recovery efficiency, while adjusting performance according 
+ to ore type. Finally, the energy dataset integrates all process stages with plant-wide loads by combining crushing and
+separation power requirements with auxiliary demands from pumps and conveyors, while also embedding seasonal 
+variability, daily shifts, maintenance downtime, and dynamic electricity tariffs. 
+Collectively, these interconnected datasets capture the theoretical performance of a typical manganese processing plant, 
+creating a digital twin that reflects both operational complexity and economic implications.
+
+"""
+
 import pandas as pd
 import numpy as np
 import datetime
@@ -412,6 +430,7 @@ class ManganeseDataGenerator:
         print(f"Total equipment units: {total_units}")
 
         return equipment_health
+
 
     def generate_energy_data(self, crushing_data, separation_data, n_samples=10000):
         """Generate energy consumption dataset"""
