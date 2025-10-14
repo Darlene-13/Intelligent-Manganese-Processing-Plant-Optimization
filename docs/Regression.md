@@ -63,16 +63,16 @@ If there’s just one, it’s **simple linear regression**. Keep this in mind �
 1. **The goals?** Minimize the difference between actual data points and predicted values — always aim for that.  
    - Visualize it below 👇:
 
-![BEST LINE OF FIT](src/models/BestLineOfFit.png)
+    ![BEST LINE OF FIT](src/models/BestLineOfFit.png)
  
    - The **Y** Axis is the dependent or the target variable and the **X** is the independent variable (the predictor of Y). There are many functions that can used in regression but a linear function is the simplest one.
 
 2. **Equation of the Best-Line of Fit:** For simple linear regression (one independent variable the best line of fit can be represented by the normal linear equation we all know!):
      `y = mx + b`
-   * Where: y = Predicted value, x = input (dependent variable), m = slope of the line (gradient) and b is the intercept (the value of y when x = 0).
+    Where: y = Predicted value, x = input (dependent variable), m = slope of the line (gradient) and b is the intercept (the value of y when x = 0).
 
 > The best line of fit is the line that optimuzed the values of (m) and (b) that is the gradient and the intercept so that that predicted values are close to the data points.
 
 3. **Minimizing the Error: The Least Squares Method** Whoooa,,,chill chill chill don't freak out. Its actually interesting
 
-To find the best lien of fit we us a method called **Least Squares** you can find this in my previous documentation **[LEAST SQUARES METHOD](docs/Least_Squares.md)**
+    To find the best lien of fit we us a method called **Least Squares** you can find this in my previous documentation **[LEAST SQUARES METHOD](docs/Least_Squares.md)**
