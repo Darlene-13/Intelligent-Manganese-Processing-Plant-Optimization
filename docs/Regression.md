@@ -7,20 +7,21 @@
 
 ### LINEAR REGRESSION
 #### INTRODUCTION TO LINEAR REGRESSION
-Linear regression is a supervised machine learning algorithm. That line alone should tell you a lot. (Supervised) to mean it learns from labelled datasets and maps that has datapoints. 
-Linear regression has the most optimized linear functions which can be used in prediction. 
+ Linear regression is a supervised machine learning algorithm. That line alone should tell you a lot. (Supervised) to mean it learns from labelled datasets and maps that has datapoints. 
+ Linear regression has the most optimized linear functions which can be used in prediction. 
 * Have a look at my **[Recovery Model for my Simulated smart manganese plant project.](https://github.com/Darlene-13/Intelligent-Manganese-Processing-Plant-Optimization)**
 
-Linear regression works with the assumption that there exists a linear relationship between the input and the output, this should tell you that there should be a constant rate of change between the two. The relationship can be well represented in a straight line.
+ Linear regression works with the assumption that there exists a linear relationship between the input and the output, this should tell you that there should be a constant rate of change between the two. The relationship can be well represented in a straight line.
 
-Wait wait wait! I learn with examples so why not give you some examples: 
+ Wait wait wait! I learn with examples so why not give you some examples: 
 1. If you wanted to predict a student's exam score based on how many hours they studied, a possible outcome would be that students who study more hours are likely to pass their exams compared to students who studied less hours. 
 
-Looking at that example you realize we have more than one variable. One is the dependent variable and the other is the independent variable, that's how relationships are formed the independent variable predicts the dependent variable.
+ Looking at that example you realize we have more than one variable. One is the dependent variable and the other is the independent variable, that's how relationships are formed the independent variable predicts the dependent variable.
 
-That brings us to: We can have more thna one independent variable in linear regression and that is called multiple linear regression....the opposite is true, simple linear regression. We will definetly come back to this, keep reading hahaha.
+ That brings us to: We can have more thna one independent variable in linear regression and that is called multiple linear regression....the opposite is true, simple linear regression. We will definetly come back to this, keep reading hahaha.
 
-WHY LINEAR REGRESSION THOUGH? 
+### WHY LINEAR REGRESSION THOUGH?
+
 1. **Simplicity and Intepretability** If you know linear algebra then kudos you know linear regression because it embodies linear algebra by solving for co-efficients and computing predictions. It is the best starting point for machine learning
 2. **Predictive Ability** I guess we've all at somepoint wanted to be witches who could predict the future, guess what, that where linear regression comes, it helps in predictions, not the future but kinda....this can be applied in various field eg: Health, Finance, Marketing etc.
 3. **Base for Other Models** Should we call it the master key or what? Anyway most advance algorithms like logistic regssion or neural networks have built on linear regression.
@@ -40,5 +41,5 @@ Let's jump tot the interesting part for math lovers....
 - This line basically aims in minimizing the difference between the actual data points and the predicted values from the model. That should always be the goal.
 - Look at the graph below.
 
-![BEST LINE OF FIT](/Intelligent-Manganese-Processing-Plant-Optimization/src/models/BestLineOfFit.png)
+![BEST LINE OF FIT](src/models/BestLineOfFit.png)
 
