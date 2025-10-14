@@ -63,7 +63,7 @@ If there’s just one, it’s **simple linear regression**. Keep this in mind �
 1. **The goals?** Minimize the difference between actual data points and predicted values — always aim for that.  
    - Visualize it below 👇:
 
-    ![BEST LINE OF FIT](docs/BestLineOfFit.png)
+    ![BEST LINE OF FIT](BestLineOfFit.png)
  
    - The **Y** Axis is the dependent or the target variable and the **X** is the independent variable (the predictor of Y). There are many functions that can used in regression but a linear function is the simplest one.
 
