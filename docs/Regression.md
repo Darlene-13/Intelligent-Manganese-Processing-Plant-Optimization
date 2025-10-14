@@ -75,4 +75,8 @@ If there’s just one, it’s **simple linear regression**. Keep this in mind �
 
 3. **Minimizing the Error: The Least Squares Method** Whoooa,,,chill chill chill don't freak out. Its actually interesting
 
-    To find the best lien of fit we us a method called **Least Squares** you can find this in my previous documentation **[LEAST SQUARES METHOD](docs/Least_Squares.md)**
+   * To find the best line of fit we us a method called **Least Squares** you can find this in my previous documentation **[LEAST SQUARES METHOD](docs/Least_Squares.md)**, basically the idea behind the method is to minimize the sum of the squared differences between the aactual data points and the predicted values from the line.
+   * The difference is called rediuals and can be calculated as: `y_2 - y_1` where y_2 is the actual observed value and y_1 is the predicted value from the line.
+
+It is also important to note that the least squares method minimized the sum of the squared residuals thus ensuring that the line of best fit represents the data where the sum of squared differences between the predicted value and actual values are as small as possible.
+4. 
