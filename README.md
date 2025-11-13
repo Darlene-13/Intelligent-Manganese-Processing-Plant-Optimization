@@ -518,17 +518,16 @@ manganese-optimization-api/
 ### Java/Backend Stack
 - **Framework**: Spring Boot 3.x, Spring Data JPA, Spring Security
 - **API**: Spring Web MVC, Spring WebSocket, Swagger/OpenAPI
-- **Messaging**: Apache Kafka, Kafka Streams, RabbitMQ
-- **Database**: PostgreSQL, Redis (caching), InfluxDB (time-series)
-- **Testing**: JUnit 5, Mockito, TestContainers, Rest Assured
+- **Messaging**: Apache Kafka, Kafka Streams
+- **Database**: PostgreSQL, Redis
+- **Testing**: JUnit 5
 - **Build Tools**: Maven, Docker, Kubernetes
 
 ### Integration & DevOps
 - **Containerization**: Docker, Docker Compose
-- **Orchestration**: Kubernetes, Helm Charts
-- **CI/CD**: GitHub Actions, Jenkins
-- **Monitoring**: Prometheus, Grafana, ELK Stack (Elasticsearch, Logstash, Kibana)
-- **Cloud**: AWS/Azure/GCP compatible architecture
+- **Orchestration**: Kubernetes
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Prometheus, Grafana
 
 ### Industrial Integration
 - **Industrial Protocols**: OPC UA, Modbus TCP/IP
@@ -541,21 +540,6 @@ manganese-optimization-api/
 ```bash
 pip install uv
 uv pip install -r requirements.txt
-```
-
-## Quick Demo
-
-```python
-# Load sample data and run prediction
-from src.models.recovery_model import ManganeseRecoveryModel
-
-model = ManganeseRecoveryModel()
-model.load_pretrained()
-
-# Sample input: [grade%, particle_size_mm, spiral_speed_rpm, magnetic_intensity_T]
-sample_input = [32.5, 0.5, 45, 1.2]
-recovery_prediction = model.predict(sample_input)
-print(f"Predicted Mn Recovery: {recovery_prediction:.1f}%")
 ```
 
 ## Expected Results
