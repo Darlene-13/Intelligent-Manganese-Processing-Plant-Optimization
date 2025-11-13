@@ -501,31 +501,40 @@ manganese-optimization-api/
 
 ## Performance Metrics
 
-| Metric | Baseline | Target | Current |
-|--------|----------|--------|---------|
-| Mn Recovery | 70% | 78% | TBD |
-| Energy Efficiency | 50 kWh/t | 42 kWh/t | TBD |
-| Equipment Uptime | 85% | 95% | TBD |
-| Grade Consistency | ±5% | ±2% | TBD |
-
-## 🔍 Week 1 Milestones
-
-- **Day 1**: ✅ Environment setup, synthetic data generation
-- **Day 2**: ✅ Data preprocessing, initial EDA
-- **Day 3**: ✅ Feature engineering, correlation analysis
-- **Day 4**: ✅ Baseline model development
-- **Day 5**: ✅ Model optimization, hyperparameter tuning
-- **Day 6**: ✅ Integration testing, performance validation
-- **Day 7**: ✅ Documentation, dashboard deployment
+ -- To be filled based on model evaluations and optimization results
 
 ## Technologies Used
 
+## Technologies Used
+
+### Python/ML Stack
 - **Data Processing**: Pandas, NumPy, Scipy
-- **Machine Learning**: Scikit-learn, XGBoost, TensorFlow
+- **Machine Learning**: Scikit-learn, XGBoost, TensorFlow, Keras
 - **Optimization**: CVXPY, Scipy.optimize
 - **Visualization**: Plotly, Matplotlib, Seaborn
 - **Deployment**: FastAPI, Streamlit, Docker
 - **Monitoring**: MLflow, Weights & Biases
+
+### Java/Backend Stack
+- **Framework**: Spring Boot 3.x, Spring Data JPA, Spring Security
+- **API**: Spring Web MVC, Spring WebSocket, Swagger/OpenAPI
+- **Messaging**: Apache Kafka, Kafka Streams, RabbitMQ
+- **Database**: PostgreSQL, Redis (caching), InfluxDB (time-series)
+- **Testing**: JUnit 5, Mockito, TestContainers, Rest Assured
+- **Build Tools**: Maven, Docker, Kubernetes
+
+### Integration & DevOps
+- **Containerization**: Docker, Docker Compose
+- **Orchestration**: Kubernetes, Helm Charts
+- **CI/CD**: GitHub Actions, Jenkins
+- **Monitoring**: Prometheus, Grafana, ELK Stack (Elasticsearch, Logstash, Kibana)
+- **Cloud**: AWS/Azure/GCP compatible architecture
+
+### Industrial Integration
+- **Industrial Protocols**: OPC UA, Modbus TCP/IP
+- **SCADA Integration**: Java OPC UA Client Libraries
+- **Data Streaming**: Apache Kafka, MQTT
+- **Time-Series DB**: InfluxDB, TimescaleDB
 
 ## Installation Requirements
 
@@ -550,15 +559,17 @@ print(f"Predicted Mn Recovery: {recovery_prediction:.1f}%")
 ```
 
 ## Expected Results
+- **Functional ML Pipeline**: Complete data-to-model workflow with automated preprocessing, feature engineering, model training, and evaluation pipelines
+- **Trained Models**: Recovery optimization, energy efficiency, predictive maintenance, and quality control models with validated performance metrics
+- **Interactive Dashboard**: Real-time monitoring interface displaying live plant metrics, KPIs, equipment status, and predictive alerts
+- **Performance Analysis**: Comprehensive baseline vs optimized scenario comparisons with quantified improvements and ROI projections
+- **Documentation**: Complete technical documentation, API guides, user manuals, and deployment instructions
+- **Production-Ready API**: RESTful endpoints with authentication, rate limiting, and comprehensive error handling for all ML models
+- **Real-Time Data Integration**: Enterprise-grade connection to SCADA/PLC systems with bidirectional communication capabilities
+- **Scalable Architecture**: Cloud-native microservices design supporting horizontal scaling and multi-plant deployments
+- **Predictive Maintenance System**: Automated failure prediction with maintenance scheduling and equipment lifecycle tracking
+- **Energy Optimization Engine**: Continuous monitoring and optimization of energy consumption across all processing stages
 
-- **Functional ML Pipeline**: Complete data-to-model workflow
-- **Trained Models**: Recovery, energy, maintenance, quality
-- **Interactive Dashboard**: Real-time monitoring interface
-- **Performance Analysis**: Baseline vs optimized scenarios
-- **Production-Ready API**: High Performance Java APIs
-- **Real-Time Data Integration**: Using Kafka
-- **Scalable Architecture**: Industrial Levele
-- **Documentation**: Technical and user guides
 
 ## Contributing
 
@@ -574,7 +585,7 @@ print(f"Predicted Mn Recovery: {recovery_prediction:.1f}%")
 - **Questions**: Email darlenewendie@gmail.com
 - **Documentation**: Check `docs/` and `reports/` folder
 
-## 📄 License
+##  License
 
 Apache 2.0 License - see [LICENSE](LICENSE) file for details
 
