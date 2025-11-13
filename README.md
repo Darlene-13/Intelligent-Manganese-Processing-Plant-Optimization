@@ -1,10 +1,10 @@
 # Intelligent Manganese Processing Plant Optimization
 
-## 🎯 Project Overview
+##  Project Overview
 
 This project develops machine learning models to optimize manganese ore processing operations, focusing on recovery maximization, energy efficiency, and predictive maintenance. The system targets typical manganese processing workflows including crushing, screening, gravity separation, and magnetic separation.
 
-## 📊 Problem Statement
+## Problem Statement
 
 Manganese processing plants face critical challenges:
 - **Low Recovery Rates**: Typical manganese recovery rates of 60-75% leave significant value on table
@@ -18,8 +18,9 @@ Manganese processing plants face critical challenges:
 - 25% reduction in unplanned downtime
 - Improved concentrate grade consistency (±2% Mn content)
 
-## 🏗️ System Architecture
+##️ System Architecture
 
+### PYTHON DATA BACKEND
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Data Sources  │    │   ML Pipeline    │    │   Optimization  │
@@ -31,37 +32,30 @@ Manganese processing plants face critical challenges:
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-## 🚀 Quick Start (1-Week Implementation)
+### INDUSTRIAL BACKEND (JAVA)
+```
+┌─────────────────┐      ┌──────────────────┐      ┌─────────────────┐
+│  Plant Sensors  │─────>│  Java Streaming  │─────>│  ML Models      │
+│  (SCADA/PLC)    │      │  (Kafka/Flink)   │      │  (Python/DJL)   │
+└─────────────────┘      └──────────────────┘      └─────────────────┘
+                                  │                          │
+                                  v                          v
+                         ┌──────────────────┐      ┌─────────────────┐
+                         │  Spring Boot API │<─────│  Optimization   │
+                         │  (Java Backend)  │      │  Results        │
+                         └──────────────────┘      └─────────────────┘
+                                  │
+                                  v
+                         ┌──────────────────┐
+                         │  Web Dashboard   │
+                         │  (React/Angular) │
+                         └──────────────────┘
 
-### Day 1-2: Environment Setup & Data Collection
-```bash
-git clone git@github.com:Darlene-13/Intelligent-Manganese-Processing-Plant-Optimization.git
-cd Intelligent-Manganese-Processing-Plant-Optimization
-pip install -r requirements.txt
 ```
 
-### Day 3-4: Data Analysis & Feature Engineering
-```bash
-python src/data_preprocessing.py
-python src/exploratory_analysis.py
-python src/feature_engineering.py
-```
 
-### Day 5-6: Model Development
-```bash
-python src/train_models.py --model recovery_prediction
-python src/train_models.py --model energy_optimization
-python src/train_models.py --model maintenance_prediction
-```
-
-### Day 7: Deployment & Documentation
-```bash
-python src/deploy_models.py
-python src/generate_reports.py
-```
-
-## 📁 Project Structure
-
+##  Project Structure
+### MACHINE LEARNING PROJECT STRUCTURE
 ```
 manganese-ml-optimization/
 ├── README.md
@@ -117,82 +111,395 @@ manganese-ml-optimization/
     ├── model_performance.md
     └── optimization_results.md
 ```
+### INDUSTRIAL JAVA BACKEND STRUCTURE
+```
+manganese-optimization-api/
+│
+├── pom.xml                                    # Maven dependencies
+├── README.md
+├── .gitignore
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── manganese/
+│   │   │           └── optimization/
+│   │   │               │
+│   │   │               ├── ManganeseOptimizationApplication.java    # Main Spring Boot application
+│   │   │               │
+│   │   │               ├── config/
+│   │   │               │   ├── AppConfig.java                       # General app configuration
+│   │   │               │   ├── SecurityConfig.java                  # Security settings
+│   │   │               │   ├── KafkaConfig.java                     # Kafka configuration
+│   │   │               │   ├── WebSocketConfig.java                 # WebSocket configuration
+│   │   │               │   └── SwaggerConfig.java                   # API documentation
+│   │   │               │
+│   │   │               ├── controller/
+│   │   │               │   ├── PredictionController.java            # ML prediction endpoints
+│   │   │               │   ├── OptimizationController.java          # Optimization endpoints
+│   │   │               │   ├── DataIngestionController.java         # Data upload endpoints
+│   │   │               │   ├── MonitoringController.java            # Plant monitoring endpoints
+│   │   │               │   └── HealthCheckController.java           # Health check endpoints
+│   │   │               │
+│   │   │               ├── service/
+│   │   │               │   ├── prediction/
+│   │   │               │   │   ├── PredictionService.java           # Main prediction service
+│   │   │               │   │   ├── RecoveryPredictionService.java   # Recovery rate prediction
+│   │   │               │   │   ├── EnergyPredictionService.java     # Energy consumption prediction
+│   │   │               │   │   └── MaintenancePredictionService.java # Maintenance prediction
+│   │   │               │   │
+│   │   │               │   ├── optimization/
+│   │   │               │   │   ├── OptimizationService.java         # Process optimization logic
+│   │   │               │   │   ├── RecoveryOptimizer.java           # Recovery maximization
+│   │   │               │   │   └── EnergyOptimizer.java             # Energy minimization
+│   │   │               │   │
+│   │   │               │   ├── integration/
+│   │   │               │   │   ├── ModelIntegrationService.java     # Python model integration
+│   │   │               │   │   ├── ScadaIntegrationService.java     # SCADA system integration
+│   │   │               │   │   └── DatabaseSyncService.java         # Database synchronization
+│   │   │               │   │
+│   │   │               │   ├── streaming/
+│   │   │               │   │   ├── KafkaConsumerService.java        # Kafka consumer for real-time data
+│   │   │               │   │   ├── KafkaProducerService.java        # Kafka producer for results
+│   │   │               │   │   └── DataStreamProcessor.java         # Stream processing logic
+│   │   │               │   │
+│   │   │               │   └── validation/
+│   │   │               │       ├── DataValidationService.java       # Input data validation
+│   │   │               │       └── ModelOutputValidator.java        # ML output validation
+│   │   │               │
+│   │   │               ├── model/
+│   │   │               │   ├── dto/
+│   │   │               │   │   ├── PredictionRequest.java           # Prediction request DTO
+│   │   │               │   │   ├── PredictionResponse.java          # Prediction response DTO
+│   │   │               │   │   ├── OptimizationRequest.java         # Optimization request DTO
+│   │   │               │   │   ├── OptimizationResponse.java        # Optimization response DTO
+│   │   │               │   │   ├── ProcessDataDTO.java              # Process data DTO
+│   │   │               │   │   ├── EquipmentStatusDTO.java          # Equipment status DTO
+│   │   │               │   │   └── LabResultDTO.java                # Lab results DTO
+│   │   │               │   │
+│   │   │               │   ├── entity/
+│   │   │               │   │   ├── ProcessData.java                 # Process data entity
+│   │   │               │   │   ├── Equipment.java                   # Equipment entity
+│   │   │               │   │   ├── LabResult.java                   # Lab result entity
+│   │   │               │   │   ├── PredictionHistory.java           # Prediction history
+│   │   │               │   │   └── OptimizationHistory.java         # Optimization history
+│   │   │               │   │
+│   │   │               │   └── enums/
+│   │   │               │       ├── ProcessStage.java                # Crushing, screening, etc.
+│   │   │               │       ├── EquipmentStatus.java             # Running, maintenance, etc.
+│   │   │               │       └── OptimizationType.java            # Recovery, energy, etc.
+│   │   │               │
+│   │   │               ├── repository/
+│   │   │               │   ├── ProcessDataRepository.java           # Process data JPA repository
+│   │   │               │   ├── EquipmentRepository.java             # Equipment JPA repository
+│   │   │               │   ├── LabResultRepository.java             # Lab result JPA repository
+│   │   │               │   ├── PredictionHistoryRepository.java     # Prediction history
+│   │   │               │   └── OptimizationHistoryRepository.java   # Optimization history
+│   │   │               │
+│   │   │               ├── exception/
+│   │   │               │   ├── GlobalExceptionHandler.java          # Global exception handler
+│   │   │               │   ├── ModelException.java                  # ML model exceptions
+│   │   │               │   ├── ValidationException.java             # Validation exceptions
+│   │   │               │   └── IntegrationException.java            # Integration exceptions
+│   │   │               │
+│   │   │               ├── util/
+│   │   │               │   ├── DataPreprocessor.java                # Data preprocessing utilities
+│   │   │               │   ├── FeatureExtractor.java                # Feature extraction
+│   │   │               │   ├── MetricsCalculator.java               # Metrics calculation
+│   │   │               │   └── DateTimeUtil.java                    # Date/time utilities
+│   │   │               │
+│   │   │               ├── websocket/
+│   │   │               │   ├── RealTimeDataHandler.java             # WebSocket handler
+│   │   │               │   └── NotificationHandler.java             # Alert notifications
+│   │   │               │
+│   │   │               └── scheduler/
+│   │   │                   ├── ModelRetrainingScheduler.java        # Scheduled model retraining
+│   │   │                   ├── DataSyncScheduler.java               # Scheduled data sync
+│   │   │                   └── HealthCheckScheduler.java            # Scheduled health checks
+│   │   │
+│   │   └── resources/
+│   │       ├── application.yml                                      # Main configuration
+│   │       ├── application-dev.yml                                  # Development config
+│   │       ├── application-prod.yml                                 # Production config
+│   │       │
+│   │       ├── db/
+│   │       │   └── migration/
+│   │       │       ├── V1__initial_schema.sql                       # Database schema
+│   │       │       └── V2__add_optimization_tables.sql              # Schema updates
+│   │       │
+│   │       ├── ml-models/                                           # Stored ML models
+│   │       │   ├── recovery_model.pkl
+│   │       │   ├── energy_model.pkl
+│   │       │   └── maintenance_model.pkl
+│   │       │
+│   │       └── static/
+│   │           └── swagger-ui/                                      # API documentation
+│   │
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── manganese/
+│                   └── optimization/
+│                       ├── controller/
+│                       │   ├── PredictionControllerTest.java
+│                       │   └── OptimizationControllerTest.java
+│                       │
+│                       ├── service/
+│                       │   ├── PredictionServiceTest.java
+│                       │   └── OptimizationServiceTest.java
+│                       │
+│                       └── integration/
+│                           ├── PredictionIntegrationTest.java
+│                           └── OptimizationIntegrationTest.java
+│
+├── docker/
+│   ├── Dockerfile                                                   # Docker image
+│   ├── docker-compose.yml                                           # Multi-container setup
+│   └── init-scripts/
+│       └── init-db.sql                                              # Database initialization
+│
+├── scripts/
+│   ├── start-dev.sh                                                 # Start development server
+│   ├── deploy-prod.sh                                               # Production deployment
+│   └── run-tests.sh                                                 # Run test suite
+│
+└── docs/
+    ├── API.md                                                       # API documentation
+    ├── ARCHITECTURE.md                                              # Architecture overview
+    ├── DEPLOYMENT.md                                                # Deployment guide
+    └── INTEGRATION.md                                               # Integration guide
 
-## 💾 Datasets & Data Sources
+```
+
+## Datasets & Data Sources
 
 ### Primary Datasets (Available)
 
-1. **Synthetic Manganese Plant Dataset** (Start Here - Day 1)
+1. **Simulated Manganese Plant Dataset**
    - **Source**: Generate using `src/data_generation/synthetic_plant.py`
    - **Size**: 10,000 records, 50+ features
    - **Content**: Crusher data, spiral separator performance, magnetic separator efficiency
    - **Download**: Auto-generated on first run
 
-2. **Industrial IoT Sensor Dataset**
+2. **Industrial IoT Sensor Dataset** # To be simulated
    - **Source**: Kaggle - "Mineral Processing Plant Sensor Data"
-   - **URL**: `kaggle datasets download -d industrial-iot/mineral-processing`
+   - **URL**: `src/data_generation/industrial-iot/mineral-processing`
    - **Size**: 25MB, 15,000+ records
    - **Features**: Temperature, vibration, power consumption
 
 3. **Metallurgical Test Results**
-   - **Source**: Create synthetic using geological constraints
+   - **Source**: Generated synthetic using geological constraints
    - **Script**: `src/data_generation/metallurgical_tests.py`
    - **Content**: Grade analysis, recovery tests, concentrate quality
 
 ### Secondary Datasets (Week 2+)
 
 4. **Equipment Maintenance Records**
-   - **Source**: Generate based on industry patterns
+   - **Source**: Generated based on industry patterns
    - **Content**: Failure modes, maintenance costs, downtime records
 
 5. **Energy Consumption Data**
-   - **Source**: Synthetic based on typical manganese plant power curves
+   - **Source**: Synthetic (Generated) based on typical manganese plant power curves
    - **Content**: Hourly power consumption, equipment-specific usage
 
-### Getting Started with Data (Execute in Order)
-
-```bash
-# 1. Generate synthetic process data (Day 1)
-python src/data_generation/synthetic_plant.py --plant_type manganese --days 365
-
-# 2. Download external datasets (Day 1)
-kaggle datasets download -d industrial-iot/mineral-processing
-python src/data_ingestion/external_data.py
-
-# 3. Create metallurgical test data (Day 2)
-python src/data_generation/metallurgical_tests.py --ore_type manganese
-
-# 4. Validate and clean all data (Day 2)
-python src/data_preprocessing.py --validate --clean
-```
-
 ## 🔧 Key Features & Models
+
+# Manganese Processing Plant Optimization - Key Features
+
+## Machine Learning Models
 
 ### 1. Recovery Optimization Model
 - **Algorithm**: XGBoost Regressor
 - **Input**: Ore grade, particle size, separator settings
 - **Output**: Predicted manganese recovery %
 - **Target**: >75% recovery rate
+- **Java Integration**: REST API endpoint for real-time recovery prediction
 
 ### 2. Energy Efficiency Model
 - **Algorithm**: Neural Network
 - **Input**: Throughput, equipment settings, ore hardness
 - **Output**: kWh per ton processed
 - **Target**: <45 kWh/ton
+- **Java Integration**: Streaming analytics via Kafka for continuous energy monitoring
 
 ### 3. Predictive Maintenance
 - **Algorithm**: Isolation Forest + LSTM
 - **Input**: Vibration, temperature, runtime hours
 - **Output**: Failure probability, RUL estimation
 - **Target**: 95% accuracy in failure prediction
+- **Java Integration**: WebSocket alerts for maintenance warnings, scheduled batch predictions
 
 ### 4. Quality Control System
 - **Algorithm**: Multi-output Random Forest
 - **Input**: Process parameters, feed grade
 - **Output**: Concentrate grade, impurity levels
 - **Target**: ±1% Mn grade consistency
+- **Java Integration**: Real-time quality monitoring dashboard with automated alerts
 
-## 📈 Performance Metrics
+---
+
+## Java Backend Features
+
+### 5. Real-Time Data Ingestion Pipeline
+- **Technology**: Apache Kafka + Kafka Streams
+- **Functionality**: 
+  - Ingest sensor data from SCADA/PLC systems
+  - Process 10,000+ data points per second
+  - Data validation and cleaning
+  - Stream processing for immediate insights
+- **Target**: <100ms latency for data processing
+
+### 6. Production-Ready ML API Service
+- **Technology**: Spring Boot REST API
+- **Endpoints**:
+  - `/api/v1/predict/recovery` - Recovery rate prediction
+  - `/api/v1/predict/energy` - Energy consumption forecast
+  - `/api/v1/predict/maintenance` - Equipment failure prediction
+  - `/api/v1/optimize/process` - Process parameter optimization
+  - `/api/v1/quality/monitor` - Real-time quality metrics
+- **Features**:
+  - Request validation and sanitization
+  - Response caching for frequently requested predictions
+  - Rate limiting and authentication
+  - Comprehensive API documentation (Swagger/OpenAPI)
+
+### 7. Model Integration Layer
+- **Technology**: Spring Boot + Python Model Serving
+- **Functionality**:
+  - Seamless integration with Python ML models
+  - Model versioning and A/B testing
+  - Fallback mechanisms for model failures
+  - Model performance monitoring
+- **Integration Methods**:
+  - HTTP-based model serving (Flask/FastAPI)
+  - File-based communication via shared storage
+  - gRPC for high-performance inference
+
+### 8. SCADA/PLC Integration Module
+- **Technology**: Java OPC UA Client / Modbus TCP
+- **Functionality**:
+  - Connect to industrial control systems
+  - Real-time equipment status monitoring
+  - Bidirectional communication (read sensors, send control signals)
+  - Protocol translation and data normalization
+- **Target**: Support for 500+ concurrent sensor connections
+
+### 9. WebSocket Real-Time Dashboard Backend
+- **Technology**: Spring WebSocket + STOMP
+- **Features**:
+  - Live plant metrics streaming
+  - Real-time alerts and notifications
+  - Equipment status updates
+  - Performance KPI broadcasting
+- **Target**: Push updates to 100+ concurrent dashboard users
+
+### 10. Batch Processing & Historical Analysis
+- **Technology**: Spring Batch
+- **Functionality**:
+  - Nightly batch predictions for process optimization
+  - Historical data aggregation and trend analysis
+  - Report generation (daily, weekly, monthly)
+  - Data archival and cleanup
+- **Target**: Process 1M+ historical records per batch job
+
+### 11. Alert & Notification System
+- **Technology**: Spring Event-Driven Architecture
+- **Features**:
+  - Multi-channel notifications (email, SMS, in-app)
+  - Configurable alert thresholds
+  - Alert prioritization and escalation
+  - Alert history and audit trail
+- **Alert Types**:
+  - Equipment failure warnings
+  - Quality deviations
+  - Energy consumption anomalies
+  - Recovery rate drops
+
+### 12. Data Persistence & Analytics
+- **Technology**: PostgreSQL + Spring Data JPA
+- **Features**:
+  - Time-series data storage for sensor readings
+  - Prediction history tracking
+  - Equipment maintenance logs
+  - Quality control records
+- **Performance**: Optimized queries with indexing, partitioning for time-series data
+
+### 13. Model Performance Monitoring
+- **Technology**: Spring Actuator + Micrometer
+- **Metrics Tracked**:
+  - Model prediction latency
+  - Prediction accuracy over time
+  - Model drift detection
+  - API endpoint performance
+  - System resource utilization
+- **Integration**: Prometheus, Grafana for visualization
+
+### 14. Security & Access Control
+- **Technology**: Spring Security + JWT
+- **Features**:
+  - Role-based access control (RBAC)
+  - JWT authentication for API access
+  - Audit logging for all operations
+  - Encrypted data transmission (TLS/SSL)
+- **Roles**: Admin, Plant Manager, Operator, Read-Only
+
+### 15. Multi-Environment Deployment
+- **Technology**: Docker + Kubernetes
+- **Environments**:
+  - Development (local testing)
+  - Staging (pre-production validation)
+  - Production (live plant operations)
+- **Features**:
+  - Containerized microservices
+  - Auto-scaling based on load
+  - Rolling updates with zero downtime
+  - Environment-specific configurations
+
+### 16. Optimization Recommendation Engine
+- **Technology**: Java Optimization Algorithms + ML Integration
+- **Functionality**:
+  - Generate actionable process improvement recommendations
+  - Multi-objective optimization (recovery vs. energy vs. quality)
+  - Constraint-aware suggestions (equipment limits, safety bounds)
+  - ROI calculation for recommendations
+- **Output**: Ranked list of optimization actions with expected impact
+
+### 17. Integration Testing & CI/CD Pipeline
+- **Technology**: JUnit 5, Mockito, TestContainers
+- **Features**:
+  - Unit tests for all services
+  - Integration tests for API endpoints
+  - End-to-end tests for critical workflows
+  - Automated testing in CI/CD pipeline
+- **Target**: >80% code coverage
+
+### 18. Scheduled Model Retraining Coordinator
+- **Technology**: Spring Scheduler
+- **Functionality**:
+  - Trigger Python model retraining jobs
+  - Monitor retraining progress
+  - Validate new model performance
+  - Automated model deployment after validation
+- **Schedule**: Weekly retraining with performance validation
+
+---
+
+## Integration Architecture
+
+```
+┌───────────────────────────────────────────────────────────────┐
+│                        Plant Floor Layer                      │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
+│  │ SCADA    │  │ Sensors  │  │ Equipment│  │ Lab      │       │
+│  │ Systems  │  │ (IoT)    │  │ PLCs     │  │ Systems  │       │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
+└───────────────────────────────────────────────────────────────
+
+```
+
+
+## Performance Metrics
 
 | Metric | Baseline | Target | Current |
 |--------|----------|--------|---------|
@@ -211,7 +518,7 @@ python src/data_preprocessing.py --validate --clean
 - **Day 6**: ✅ Integration testing, performance validation
 - **Day 7**: ✅ Documentation, dashboard deployment
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Data Processing**: Pandas, NumPy, Scipy
 - **Machine Learning**: Scikit-learn, XGBoost, TensorFlow
@@ -220,16 +527,14 @@ python src/data_preprocessing.py --validate --clean
 - **Deployment**: FastAPI, Streamlit, Docker
 - **Monitoring**: MLflow, Weights & Biases
 
-## 📋 Installation Requirements
+## Installation Requirements
 
 ```bash
-pip install pandas numpy scikit-learn xgboost tensorflow
-pip install plotly matplotlib seaborn streamlit
-pip install fastapi uvicorn mlflow wandb
-pip install cvxpy scipy
+pip install uv
+uv pip install -r requirements.txt
 ```
 
-## 🚀 Quick Demo
+## Quick Demo
 
 ```python
 # Load sample data and run prediction
@@ -244,16 +549,18 @@ recovery_prediction = model.predict(sample_input)
 print(f"Predicted Mn Recovery: {recovery_prediction:.1f}%")
 ```
 
-## 📊 Expected Results
+## Expected Results
 
-After 1 week of development:
 - **Functional ML Pipeline**: Complete data-to-model workflow
-- **3-4 Trained Models**: Recovery, energy, maintenance, quality
+- **Trained Models**: Recovery, energy, maintenance, quality
 - **Interactive Dashboard**: Real-time monitoring interface
 - **Performance Analysis**: Baseline vs optimized scenarios
+- **Production-Ready API**: High Performance Java APIs
+- **Real-Time Data Integration**: Using Kafka
+- **Scalable Architecture**: Industrial Levele
 - **Documentation**: Technical and user guides
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/improvement`)
@@ -261,7 +568,7 @@ After 1 week of development:
 4. Push to branch (`git push origin feature/improvement`)
 5. Create Pull Request
 
-## 📞 Support
+##  Support
 
 - **Technical Issues**: Create GitHub issue
 - **Questions**: Email darlenewendie@gmail.com
@@ -272,5 +579,5 @@ After 1 week of development:
 MIT License - see [LICENSE](LICENSE) file for details
 
 ---
-
-**Ready to optimize your manganese processing plant? Let's start with Day 1! 🚀**
+### Written By:
+Darlene Wendie
