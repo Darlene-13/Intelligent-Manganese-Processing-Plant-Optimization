@@ -287,12 +287,6 @@ manganese-optimization-api/
    - **URL**: `src/data_generation/industrial-iot/mineral-processing`
    - **Size**: 25MB, 15,000+ records
    - **Features**: Temperature, vibration, power consumption
-
-3. **Metallurgical Test Results**
-   - **Source**: Generated synthetic using geological constraints
-   - **Script**: `src/data_generation/metallurgical_tests.py`
-   - **Content**: Grade analysis, recovery tests, concentrate quality
-
 ### Secondary Datasets (Week 2+)
 
 4. **Equipment Maintenance Records**
@@ -303,7 +297,7 @@ manganese-optimization-api/
    - **Source**: Synthetic (Generated) based on typical manganese plant power curves
    - **Content**: Hourly power consumption, equipment-specific usage
 
-## 🔧 Key Features & Models
+## Key Features & Models
 
 # Manganese Processing Plant Optimization - Key Features
 
